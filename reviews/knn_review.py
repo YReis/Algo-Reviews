@@ -54,7 +54,7 @@ def applynormalization(dataframe):
     return dataframe
 
 def euclidiandistance(data, query): 
-    result = np.sqrt(((data - query) ** 2).sum())  # Square root of the sum
+    result = np.sqrt(((data - query) ** 2).sum()) 
     return result
 
 testData = applynormalization(raw_data)
@@ -71,6 +71,4 @@ for i in range(num_rows):
             dist = euclidiandistance(testData.iloc[i], testData.iloc[j])
             distance_dict[i][j] = dist
 print(distance_dict)
-writedata = json.dumps()
-with open('recomendations','w') as file :
-    file.write(distance_dict)
+
