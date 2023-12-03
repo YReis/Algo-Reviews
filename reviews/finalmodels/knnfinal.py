@@ -62,7 +62,7 @@ class Myknn :
     def predict(self, query_point, k=5):
         if self.mode == 'classification':
             neighbors = self.__findneighbours(query_point, k)
-            labels = [self.preprocessed_dataframe.iloc[i[1]]['NObeyesdad'] for i in neighbors]  # Replace 'target_column_name' with your actual target column name
+            labels = [self.preprocessed_dataframe.iloc[i[1]]['NObeyesdad'] for i in neighbors] 
             prediction = max(set(labels), key=labels.count)
         return prediction
     
