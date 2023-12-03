@@ -10,9 +10,12 @@ class dataprovider:
 
 
     def __split_data(self):
-        totalrows = len(self.dataframe)
-        trainingsize = int(totalrows/100)*self.trainpercent
-        testsize =  int(totalrows/100)*self.testpercent
+        trainingsize = self.trainpercent
+        testsize =   self.testpercent
 
-        self.trainingDataset = self.preprocessed_dataframe[0:trainingsize]
-        self.testDataset = self.preprocessed_dataframe[trainingsize:trainingsize + testsize]
+        trainingDataset = self.dataframe[0:trainingsize]
+        testDataset = self.dataframe[trainingsize:trainingsize + testsize]
+        return trainingDataset,testDataset
+    def providedata(self):
+        trainingDataset,testDataset =self.__split_data()
+        return trainingDataset,testDataset

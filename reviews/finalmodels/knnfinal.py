@@ -1,80 +1,71 @@
 import pandas as pd 
 import numpy as np 
 import math as mt
-class Myknn :
-    def __init__(self,dataframe_path:str):
-        self.dataframepath = dataframe_path
+
+class Myknn:
+    def __init__(self, trainingdata, testdata):
         self.k_similar = 5
-        self.training = 75
-        self.test =15
-        self.mode ='classification'
+        self.mode = 'classification'
+        self.trainingdata = trainingdata
+        self.labels = trainingdata['NObeyesdad']  # Store the labels
+        self.trainingdata = trainingdata.drop('NObeyesdad', axis=1)  # Drop labels from training data
+        self.testdata = testdata.drop('NObeyesdad', axis=1)  
+        
 
     def __setup(self):
-        self.raw_dataframe = pd.read_csv(self.dataframepath)
-        
+        self.preprocessed_traindata = self.__preprocess(self.trainingdata)
+        self.preprocessed_testdata = self.__preprocess(self.testdata)
  
-    def __preprocess(self):
-        self.preprocessed_dataframe = self.raw_dataframe.copy()
+    def __preprocess(self,data):
+        preprocesseddataframe = data.copy()
 
         binary_columns = ['FAVC', 'SMOKE', 'SCC', 'family_history_with_overweight']
         binary_mapping = {'yes': 1, 'no': 0}
         for column in binary_columns:
-            self.preprocessed_dataframe[column] = self.preprocessed_dataframe[column].map(binary_mapping)
+            preprocesseddataframe[column] = preprocesseddataframe[column].map(binary_mapping)
 
         gender_mapping = {"Male": 0, "Female": 1}
-        self.preprocessed_dataframe['Gender'] = self.preprocessed_dataframe['Gender'].map(gender_mapping)
+        preprocesseddataframe['Gender'] = preprocesseddataframe['Gender'].map(gender_mapping)
 
         non_binary_categorical_variables_columns = ['CAEC', 'MTRANS', 'CALC']
         for column in non_binary_categorical_variables_columns:
-            dummies = pd.get_dummies(self.preprocessed_dataframe[column], prefix=column)
-            self.preprocessed_dataframe.drop(column, axis=1, inplace=True)
-            self.preprocessed_dataframe = pd.concat([self.preprocessed_dataframe, dummies], axis=1)
+            dummies = pd.get_dummies(preprocesseddataframe[column], prefix=column)
+            preprocesseddataframe.drop(column, axis=1, inplace=True)
+            preprocesseddataframe = pd.concat([preprocesseddataframe, dummies], axis=1)
 
         numerical_columns_to_be_normalized = ["Age", "Height", "Weight", "FCVC", "NCP", "CH2O", "FAF", "TUE"]
         for column in numerical_columns_to_be_normalized:
-            self.preprocessed_dataframe[column] = self.__normalize_column(self.preprocessed_dataframe[column])
-
-        self.__split_data()
+            preprocesseddataframe[column] = self.__normalize_column(preprocesseddataframe[column])
+        return preprocesseddataframe
 
     def __normalize_column(self, col):
         return (col - col.min()) / (col.max() - col.min())
     
-    def __split_data(self):
-        totalrows = len(self.preprocessed_dataframe)
-        trainingsize = int(totalrows/100)*self.training
-        testsize =  int(totalrows/100)*self.test
-
-        self.trainingDataset = self.preprocessed_dataframe[0:trainingsize]
-        self.testDataset = self.preprocessed_dataframe[trainingsize:trainingsize + testsize]
-    
     def __euclidiandistance(self,data,query):
         return mt.sqrt(((data - query)**2).sum())
 
-    def __findneighbours(self,query_point,k=5):
-        distances = []
-        for index , row in self.preprocessed_dataframe.iterrows():
-            distance=self.__euclidiandistance(row[:-1],query_point)
-            distances.append((distance,index))
-        distances.sort(key=lambda x : x[0])
-        neightboors = distances[:k]
-        return neightboors
+    def __predict(self):
+        predictions = []
+
+        for _, test_instance in self.preprocessed_testdata.iterrows():
+            distances = self.preprocessed_traindata.apply(lambda row: self.__euclidiandistance(row, test_instance), axis=1)
+            nearest_neighbors = distances.nsmallest(self.k_similar)
+
+            if self.mode == 'classification':
+                # Use stored labels for determining the most common class
+                most_common = self.labels.loc[nearest_neighbors.index].mode()[0]
+                predictions.append(most_common)
+            else:
+                # For regression (not applicable in this scenario)
+                average = self.labels.loc[nearest_neighbors.index].mean()
+                predictions.append(average)
+
+        return predictions
     
-    def predict(self, query_point, k=5):
-        if self.mode == 'classification':
-            neighbors = self.__findneighbours(query_point, k)
-            labels = [self.preprocessed_dataframe.iloc[i[1]]['NObeyesdad'] for i in neighbors] 
-            prediction = max(set(labels), key=labels.count)
-        return prediction
-    
-    def train(self):
+    def trainadnuse(self):
         self.__setup()
-        self.__preprocess()
-        self.predict()
-        return self.preprocessed_dataframe
+        return self.__predict()
+        
 
 
-if __name__ == "__main__":
 
-    model = Myknn('ObesityDataSet.csv')
-    
-    print(model.train())
