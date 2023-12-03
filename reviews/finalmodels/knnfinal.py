@@ -7,8 +7,8 @@ class Myknn:
         self.k_similar = 5
         self.mode = 'classification'
         self.trainingdata = trainingdata
-        self.labels = trainingdata['NObeyesdad']  # Store the labels
-        self.trainingdata = trainingdata.drop('NObeyesdad', axis=1)  # Drop labels from training data
+        self.labels = trainingdata['NObeyesdad']  
+        self.trainingdata = trainingdata.drop('NObeyesdad', axis=1)  
         self.testdata = testdata.drop('NObeyesdad', axis=1)  
         
 
@@ -52,11 +52,9 @@ class Myknn:
             nearest_neighbors = distances.nsmallest(self.k_similar)
 
             if self.mode == 'classification':
-                # Use stored labels for determining the most common class
                 most_common = self.labels.loc[nearest_neighbors.index].mode()[0]
                 predictions.append(most_common)
             else:
-                # For regression (not applicable in this scenario)
                 average = self.labels.loc[nearest_neighbors.index].mean()
                 predictions.append(average)
 
