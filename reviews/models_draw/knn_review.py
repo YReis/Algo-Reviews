@@ -62,7 +62,6 @@ testData = testData.drop(['NObeyesdad'],axis=1)
 
 
 num_rows = len(testData)
-distance_matrix = np.zeros((num_rows, num_rows))
 distance_dict = {}
 for i in range(num_rows):
     distance_dict[i] = {}

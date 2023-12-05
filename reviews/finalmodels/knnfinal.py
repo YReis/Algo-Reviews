@@ -6,7 +6,6 @@ class Myknn:
     def __init__(self, trainingdata, testdata):
         self.k_similar = 5
         self.mode = 'classification'
-        self.trainingdata = trainingdata
         self.labels = trainingdata['NObeyesdad']  
         self.trainingdata = trainingdata.drop('NObeyesdad', axis=1)  
         self.testdata = testdata.drop('NObeyesdad', axis=1)  
