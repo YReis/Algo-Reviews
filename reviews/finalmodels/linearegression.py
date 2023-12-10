@@ -70,13 +70,13 @@ class MlLinearRegressor:
         r2 = 1 - (ss_res / ss_tot) if ss_tot != 0 else float('nan')
 
         return r2, mse
+    #Usage
     def trainadnuse(self):
         self.prepare_data()
         self.calculate_coefficients()
         self.predict()
         r2, mse = self.calculate_performance_metrics()
         return r2, mse
-# Usage
 
 
 

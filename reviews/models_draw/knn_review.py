@@ -2,7 +2,7 @@ import pandas as pd
 import math
 import numpy as np
 import json
-raw_data=pd.read_csv('../ObesityDataSet.csv')
+raw_data=pd.read_csv('ObesityDataSet.csv')
 
 columns_to_be_normalized = [
     "Gender",
