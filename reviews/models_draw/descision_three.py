@@ -64,5 +64,9 @@ class DescisiontreeClassifier():
                         best_split['data_right'] = data_right
                         best_split['info_gain'] = curr_info_gain
                         max_info_gain = curr_info_gain
-        
+        return best_split
+    
+    def split(self,dataset,feature_index,treshold):
+        data_left = np.array([row for row in dataset if row[feature_index]<=treshold])
 
+    
