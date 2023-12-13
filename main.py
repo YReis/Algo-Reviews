@@ -1,5 +1,5 @@
 from reviews.data import dataprovider
-from reviews.finalmodels import Myknn,MlLinearRegressor
+from reviews.finalmodels import Myknn,MlLinearRegression
 
 datapath = 'RealState.csv'
 
@@ -7,6 +7,6 @@ datapath = 'RealState.csv'
 
 dataprovider = dataprovider(datapath,70,30)
 traindata,testdata=dataprovider.providedata()
-model = MlLinearRegressor(traindata,testdata)
+model = MlLinearRegression(traindata,testdata)
 
-print(model.trainadnuse())
+model.trainanduse()

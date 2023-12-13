@@ -59,7 +59,7 @@ class Myknn:
 
         return predictions
     
-    def trainadnuse(self):
+    def trainanduse(self):
         self.__setup()
         return self.__predict()
         
