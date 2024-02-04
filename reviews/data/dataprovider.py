@@ -17,6 +17,11 @@ class dataprovider:
         trainingDataset = self.dataframe[0:trainingsize]
         testDataset = self.dataframe[trainingsize:trainingsize + testsize]
         return trainingDataset,testDataset
-    def providedata(self):
+    def providedata(self,mode):
         trainingDataset,testDataset =self.__split_data()
-        return trainingDataset,testDataset
+        if(mode == 'split'):
+            return trainingDataset,testDataset
+        elif(mode == 'full'):
+            return self.dataframe
+        else:
+            return trainingDataset,testDataset

@@ -68,5 +68,34 @@ class DescisiontreeClassifier():
     
     def split(self,dataset,feature_index,treshold):
         data_left = np.array([row for row in dataset if row[feature_index]<=treshold])
+        data_right = np.array([row for row in dataset if row[feature_index]>treshold])
+        return data_left,data_right
+    
+    def information_gain(self,parent,left_child,right_child):
+        wight_left=len(left_child)/len(parent)
+        wight_right=len(right_child)/len(parent)
+        gain = self.gini_index(parent) - wight_left*self.gini_index(left_child) - wight_right*self.gini_index(right_child)
+        return gain
+    
+    def gini_index(self,dataset):
+        y = dataset[:,-1]
+        gini = 1
+        labels = np.unique(y)
+        for label in labels:
+            p = np.sum(y==label)/len(y)
+            gini -= p**2
+        return gini
+    
+    def calculate_leaf_value(self,y):
+        y = list(y)
+        return max(y,key=y.count)
+    
+    def fit(self,X,y):
+        dataset = np.concatenate((X,y),axis=1)
+        self.root = self.build_three(dataset)
+
+    def predict(self,X):
+        preditions = [self.predict_sample(x,self.root) for x in X]
+        return preditions
 
     
