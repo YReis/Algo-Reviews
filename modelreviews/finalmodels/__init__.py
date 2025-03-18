@@ -1,0 +1,3 @@
+from modelreviews.finalmodels.knnfinal import Myknn
+from modelreviews.finalmodels.linearegression import MlLinearRegression
+from modelreviews.finalmodels.neuralnet import NeuralNet

@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from reviews.data import dataprovider
+from modelreviews.data import dataprovider
 
 datapath= "RealState.csv"
 dataprovider = dataprovider(datapath, 70, 30)

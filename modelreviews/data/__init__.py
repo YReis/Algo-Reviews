@@ -1,0 +1,1 @@
+from modelreviews.data.dataprovider import dataprovider

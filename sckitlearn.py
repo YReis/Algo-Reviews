@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
-from reviews.data.dataprovider import dataprovider
+from modelreviews.data.dataprovider import dataprovider
 
 # linear regression model test
 df = dataprovider('RealState.csv', 80, 30).providedata('full')
